@@ -41,7 +41,6 @@ fn (m Mandel)get_pixel(ix int, iy int) Pixel {
 	x := m.xmin + (m.xmax - m.xmin) * ix / (m.width - 1)
 	y := m.ymin + (m.ymax - m.ymin) * iy / (m.height - 1)
 	i := mandel_iter(x, y, m.iterations)
-	ppos := 4 * (m.width * iy + ix)
 
 	if i > m.iterations {
 		return Pixel {0, 0, 0, `#`}
@@ -109,16 +108,16 @@ fn main() {
 			`d` {
 				pointx += zoom
 			}
-			`q` {
+			`a` {
 				pointx -= zoom
 			}
-			`z` {
+			`w` {
 				pointy -= zoom
 			}
 			`s` {
 				pointy += zoom
 			}
-			`a` {
+			`q` {
 				zoom *= 1.1
 				iter *= 0.95
 			}

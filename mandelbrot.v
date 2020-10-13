@@ -3,6 +3,11 @@ import readline
 import term
 import os
 
+const (
+	keys = [`w`, `a`, `s`, `d`, `q`, `e`, `i`, `k`]
+	// keys = [`z`, `q`, `s`, `d`, `a`, `e`, `i`, `k`]
+)
+
 struct Pixel {
 	r int
 	g int
@@ -105,30 +110,30 @@ fn main() {
 		input := r.read_char()
 		// input := os.input('> ')
 		match byte(input) {
-			`d` {
-				pointx += zoom
-			}
-			`a` {
-				pointx -= zoom
-			}
-			`w` {
+			keys[0] {
 				pointy -= zoom
 			}
-			`s` {
+			keys[1] {
+				pointx -= zoom
+			}
+			keys[2] {
 				pointy += zoom
 			}
-			`q` {
-				zoom *= 1.1
-				iter *= 0.95
+			keys[3] {
+				pointx += zoom
 			}
-			`e` {
-				zoom *= 0.9
-				iter *= 1.05
+			keys[4] {
+				zoom *= 1.5
+				iter *= 0.75
 			}
-			`i` {
+			keys[5] {
+				zoom *= 0.5
+				iter *= 1.25
+			}
+			keys[6] {
 				iter *= 1.5
 			}
-			`k` {
+			keys[7] {
 				iter *= 0.5
 			}
 			`\0`, 0x04 {

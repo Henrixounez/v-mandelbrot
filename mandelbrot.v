@@ -219,6 +219,19 @@ fn get_args() Args {
 				args.iter = os.args[i + 1].f64()
 				i++
 			}
+			'--help', '-h' {
+				println('== V Mandelbrot Visualizer ==')
+				println('')
+				println('Arguments :')
+				println('  -h, --help               Prints this help message')
+				println('  -c, --color              Activate colored visualization mode')
+				println('  -v, --verbose            Activate verbose mode for coordinates + other informations')
+				println('  -px, --pointx [Number]   Sets the starting X position at [Number]')
+				println('  -py, --pointy [Number]   Sets the starting Y position at [Number]')
+				println('  -z, --zoom [Number]      Sets the starting zoom at [Number]')
+				println('  -i, --iter [Number]      Sets the starting amount of iterations at [Number]')
+				exit(0)
+			}
 			else {}
 		}
 	}

@@ -230,6 +230,18 @@ fn get_args() Args {
 				println('  -py, --pointy [Number]   Sets the starting Y position at [Number]')
 				println('  -z, --zoom [Number]      Sets the starting zoom at [Number]')
 				println('  -i, --iter [Number]      Sets the starting amount of iterations at [Number]')
+				println('')
+				println('Keys by default (customizable in the source):')
+				println('  Go Up                `w`')
+				println('  Go Down              `a`')
+				println('  Go Left              `s`')
+				println('  Go Right             `d`')
+				println('  Zoom                 `e`')
+				println('  Unzoom               `q`')
+				println('  Increase iter nb     `i`')
+				println('  Decrease iter nb     `k`')
+				println('  Switch verbose mode  `v`')
+				println('  Switch color mode    `c`')
 				exit(0)
 			}
 			else {}

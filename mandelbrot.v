@@ -6,14 +6,53 @@ import runtime
 import sync
 
 const (
-	keys = [`w`, `a`, `s`, `d`, `q`, `e`, `i`, `k`]
-	// keys = [`z`, `q`, `s`, `d`, `a`, `e`, `i`, `k`]
+	// keys = Keys {
+	// 	up: `w`,
+	// 	down: `a`,
+	// 	left: `s`,
+	// 	right: `d`,
+	// 	unzoom: `q`,
+	// 	zoom: `e`,
+	// 	increase_iter: `i`,
+	// 	decrease_iter: `k`,
+	// 	verbose: `v`,
+	// 	colored: `c`,
+	// }
+	keys = Keys {
+		up: `z`,
+		down: `s`,
+		left: `q`,
+		right: `d`,
+		unzoom: `a`,
+		zoom: `e`,
+		increase_iter: `i`,
+		decrease_iter: `k`,
+		verbose: `v`,
+		colored: `c`,
+	}
 )
+
+struct Keys {
+	up byte
+	down byte
+	left byte
+	right byte
+	unzoom byte
+	zoom byte
+	increase_iter byte
+	decrease_iter byte
+	verbose byte
+	colored byte
+}
 
 struct Args {
 mut:
 	colored bool
 	verbose bool
+	pointx f64 = 0.0
+	pointy f64 = 0.0
+	zoom f64 = 1.0
+	iter f64 = 1000.0
 }
 struct Pixel {
 	r int
@@ -124,9 +163,6 @@ fn mandelbrot(xmin f64, xmax f64, ymin f64, ymax f64, iterations int, args Args)
 			arr_c[valpos.pos] = valpos.c
 		}
 	}
-	if args.verbose {
-		println('xmin: $xmin, xmax: $xmax, ymin: $ymin, ymax: $ymax, iterations: $iterations')
-	}
 	if !args.colored {
 		for y in 0..max_height {
 			for x in 0..width {
@@ -155,62 +191,93 @@ fn mandelbrot(xmin f64, xmax f64, ymin f64, ymax f64, iterations int, args Args)
 	}
 }
 
-fn main() {
+fn get_args() Args {
 	mut args := Args{}
-	for arg in os.args {
-		match arg {
-			'-color' { args.colored = true }
-			'-verbose' { args.verbose = true }
+	for i := 0; i < os.args.len; i++ {
+		match os.args[i] {
+			'--color', '-c' {
+				args.colored = true
+			}
+			'--verbose', '-v' {
+				args.verbose = true
+			}
+			'--pointx', '-px' {
+				println(os.args[i + 1])
+				println(os.args[i + 1].f64())
+				args.pointx = os.args[i + 1].f64()
+				i++
+			}
+			'--pointy', '-py' {
+				args.pointy = os.args[i + 1].f64()
+				i++
+			}
+			'--zoom', '-z' {
+				args.zoom = os.args[i + 1].f64()
+				i++
+			}
+			'--iter', '-i' {
+				args.iter = os.args[i + 1].f64()
+				i++
+			}
 			else {}
 		}
 	}
-	mut pointx := 0.0
-	mut pointy := 0.0
-	mut zoom := 1.0	
-	mut iter := 1000.0
+	return args
+}
+
+fn main() {
+	mut args := get_args()
 	width, height := term.get_terminal_size()
 	ratio := f64(width) / f64(height)
-
 
 	for {
 		mut r := readline.Readline{}
 		r.enable_raw_mode_nosig()
 
+		if args.verbose {
+			println('pointx: ${args.pointx}, pointy: ${args.pointy}, zoom: ${args.zoom}, iter: ${args.iter}')
+		}
 		mandelbrot(
-			pointx - zoom * ratio / 2,
-			pointx + zoom * ratio / 2,
-			pointy - zoom,
-			pointy + zoom,
-			int(iter),
+			args.pointx - args.zoom * ratio / 2,
+			args.pointx + args.zoom * ratio / 2,
+			args.pointy - args.zoom,
+			args.pointy + args.zoom,
+			int(args.iter),
 			args
 		)
 		input := r.read_char()
 		match byte(input) {
-			keys[0] {
-				pointy -= zoom
+			keys.up {
+				args.pointy -= args.zoom
 			}
-			keys[1] {
-				pointx -= zoom
+			keys.left {
+				args.pointx -= args.zoom
 			}
-			keys[2] {
-				pointy += zoom
+			keys.down {
+				args.pointy += args.zoom
 			}
-			keys[3] {
-				pointx += zoom
+			keys.right {
+				args.pointx += args.zoom
 			}
-			keys[4] {
-				zoom *= 1.5
-				iter *= 0.80
+			keys.unzoom {
+				args.zoom *= 1.5
+				args.iter *= 0.80
 			}
-			keys[5] {
-				zoom *= f64(2) / 3
-				iter *= 1.25
+			keys.zoom {
+				args.zoom *= f64(2) / 3
+				args.iter *= 1.25
 			}
-			keys[6] {
-				iter *= 1.5
+			keys.increase_iter {
+				args.iter *= 1.5
 			}
-			keys[7] {
-				iter *= 0.5
+			keys.decrease_iter {
+				args.iter *= 0.5
+			}
+			keys.verbose {
+				args.verbose = !args.verbose
+			}
+			keys.colored {
+				args.colored = !args.colored
 			}
 			`\0`, 0x04 {
 				break

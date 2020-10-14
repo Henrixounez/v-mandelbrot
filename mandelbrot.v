@@ -6,30 +6,30 @@ import runtime
 import sync
 
 const (
-	// keys = Keys {
-	// 	up: `w`,
-	// 	down: `a`,
-	// 	left: `s`,
-	// 	right: `d`,
-	// 	unzoom: `q`,
-	// 	zoom: `e`,
-	// 	increase_iter: `i`,
-	// 	decrease_iter: `k`,
-	// 	verbose: `v`,
-	// 	colored: `c`,
-	// }
 	keys = Keys {
-		up: `z`,
-		down: `s`,
-		left: `q`,
+		up: `w`,
+		down: `a`,
+		left: `s`,
 		right: `d`,
-		unzoom: `a`,
+		unzoom: `q`,
 		zoom: `e`,
 		increase_iter: `i`,
 		decrease_iter: `k`,
 		verbose: `v`,
 		colored: `c`,
 	}
+	// keys = Keys {
+	// 	up: `z`,
+	// 	down: `s`,
+	// 	left: `q`,
+	// 	right: `d`,
+	// 	unzoom: `a`,
+	// 	zoom: `e`,
+	// 	increase_iter: `i`,
+	// 	decrease_iter: `k`,
+	// 	verbose: `v`,
+	// 	colored: `c`,
+	// }
 )
 
 struct Keys {
